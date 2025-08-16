@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Blog Title</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="styles.css">
+    </head>
+<body>
+    <!-- Navigation Home Button -->
+    <button class="nav-home" id="homeBtn">← Home</button>
+
+    <!-- Banner Section -->
+    <header class="banner" id="banner">
+        <div class="banner-content">
+            <h1>The Crankysaurus Chronicles</h1>
+            <p>Rexy CHOMP! Good Rexy!</p>
+        </div>
+    </header>
+
+    <!-- Home Content -->
+    <div class="home-content" id="homeContent">
+        <main class="main-content">
+            <div class="container">
+                <!-- Sticky Posts Section -->
+                <section class="section">
+                    <h2>Featured Posts</h2>
+                    <div class="posts-grid" id="stickyPosts">
+                        <!-- Sticky posts will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Latest Posts Section -->
+                <section class="section">
+                    <h2>Latest Posts</h2>
+                    <div class="posts-grid vertical" id="latestPosts">
+                        <!-- Latest posts will be loaded here -->
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Post Content View -->
+    <div class="post-content" id="postContent">
+        <div class="post-hero-image" id="postHeroImage"></div>
+        <div class="container">
+            <div class="post-content-inner" id="postContentInner">
+                <!-- Post content will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading indicator -->
+    <div id="loadingIndicator" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.8); color: white; padding: 20px; border-radius: 10px; z-index: 1000;">
+        Loading...
+    </div>
+
+    <script>
+        // Global variables
+        let blogIndex = null;
+
+        // Function to show loading indicator
+        function showLoading() {
+            document.getElementById('loadingIndicator').style.display = 'block';
+        }
+
+        // Function to hide loading indicator
+        function hideLoading() {
+            document.getElementById('loadingIndicator').style.display = 'none';
+        }
+
+        // Function to load blog index
+        async function loadBlogIndex() {
+            try {
+                showLoading();
+                
+                // Load the posts index
+                const response = await fetch('posts-index.json');
+                if (response.ok) {
+                    blogIndex = await response.json();
+                    console.log('Loaded blog index from posts-index.json');
+                } else {
+                    console.warn('posts-index.json not found, using sample data');
+                    blogIndex = getSampleIndex();
+                }
+                
+                hideLoading();
+                return blogIndex;
+            } catch (error) {
+                console.error('Error loading blog index:', error);
+                hideLoading();
+                return "";
+            }
+        }
+
+        // Function to get actual post date (file modification or data date)
+        function getPostDate(post) {
+            if (post.lastModified) {
+                return new Date(post.lastModified);
+            } else if (post.date) {
+                return new Date(post.date);
+            } else {
+                return new Date();
+            }
+        }
+
+        // Function to load individual post content in iframe
+        async function loadPostContent(post) {
+            try {
+                const response = await fetch(post.contentFile);
+                if (response.ok) {
+                    console.log(`Content file found for ${post.id}: ${post.contentFile}`);
+                    return post.contentFile; // Return the URL instead of content
+                } else {
+                    throw new Error(`Content file not found: ${post.contentFile}`);
+                }
+            } catch (error) {
+                console.error(`Could not load content file for ${post.id}:`, error);
+                return null;
+            }
+        }
+
+        // Function to create post card HTML
+        function createPostCard(post, isVertical = false) {
+            const thumbnailStyle = post.thumbnail ? `style="background-image: url('${post.thumbnail}')"` : '';
+            const postDate = getPostDate(post);
+            const formattedDate = postDate.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            return `
+                <div class="post-card" data-post-id="${post.id}">
+                    <div class="post-thumbnail" ${thumbnailStyle}></div>
+                    <div class="post-info">
+                        <h3 class="post-title">${post.title}</h3>
+                        <p class="post-excerpt">${post.excerpt}</p>
+                        <div class="post-date">${formattedDate}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Load posts into the page
+        function loadPosts() {
+            if (!blogIndex) return;
+
+            const stickyContainer = document.getElementById('stickyPosts');
+            const latestContainer = document.getElementById('latestPosts');
+
+            // Sort latest posts by actual date (newest first)
+            const sortedLatestPosts = [...blogIndex.latestPosts].sort((a, b) => {
+                return getPostDate(b) - getPostDate(a);
+            });
+
+            stickyContainer.innerHTML = blogIndex.stickyPosts.map(post => createPostCard(post, false)).join('');
+            latestContainer.innerHTML = sortedLatestPosts.map(post => createPostCard(post, true)).join('');
+
+            // Add click listeners to all post cards
+            document.querySelectorAll('.post-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const postId = card.dataset.postId;
+                    showPost(postId);
+                });
+            });
+        }
+
+        // Find post by ID
+        function findPost(postId) {
+            if (!blogIndex) return null;
+            return [...blogIndex.stickyPosts, ...blogIndex.latestPosts].find(post => post.id === postId);
+        }
+
+        // Update page title based on current view
+        function updatePageTitle(postTitle = null) {
+            const baseTitle = "Your Blog Title";
+            if (postTitle) {
+                document.title = `${postTitle} - ${baseTitle}`;
+            } else {
+                document.title = baseTitle;
+            }
+        }
+
+        // Get current URL state
+        function getCurrentState() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return {
+                postId: urlParams.get('post')
+            };
+        }
+
+        // Update URL without page reload
+        function updateURL(postId = null) {
+            const url = new URL(window.location);
+            if (postId) {
+                url.searchParams.set('post', postId);
+            } else {
+                url.searchParams.delete('post');
+            }
+            
+            const state = { postId };
+            history.pushState(state, '', url);
+        }
+
+
+        // Show individual post with iframe
+        async function showPost(postId, pushState = true) {
+            const post = findPost(postId);
+            if (!post) return;
+
+            showLoading();
+
+            try {
+                const contentUrl = await loadPostContent(post);
+
+                document.getElementById('homeContent').style.display = 'none';
+                document.getElementById('postContent').style.display = 'block';
+                document.getElementById('homeBtn').classList.add('show');
+
+                if (contentUrl) {
+                    // Create iframe element for better control
+                    const iframe = document.createElement('iframe');
+                    iframe.src = contentUrl;
+                    iframe.title = post.title;
+                    iframe.style.cssText = `
+                        width: 80%; 
+                        margin: 0 auto; 
+                        display: block; 
+                        border: none; 
+                        border-radius: 8px; 
+                        overflow: hidden;
+                        min-height: 400px;
+                    `;
+                    iframe.scrolling = "no";
+                    
+                    // Auto-resize iframe to content height
+                    iframe.onload = function() {
+                        try {
+                            const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                            const height = Math.max(
+                                iframeDoc.body.scrollHeight,
+                                iframeDoc.body.offsetHeight,
+                                iframeDoc.documentElement.clientHeight,
+                                iframeDoc.documentElement.scrollHeight,
+                                iframeDoc.documentElement.offsetHeight
+                            );
+                            iframe.style.height = height + 'px';
+                        } catch (e) {
+                            // Cross-origin content - use fallback
+                            iframe.style.height = '800px';
+                        }
+                    };
+                    
+                    // Clear container and add iframe
+                    document.getElementById('postContentInner').innerHTML = '';
+                    document.getElementById('postContentInner').appendChild(iframe);
+                } else {
+                    document.getElementById('postContentInner').innerHTML = `<h1>${post.title}</h1><p>Content could not be loaded.</p>`;
+                }
+
+                const heroImage = document.getElementById('postHeroImage');
+                if (post.thumbnail) {
+                    heroImage.style.backgroundImage = `url('${post.thumbnail}')`;
+                } else {
+                    heroImage.style.backgroundImage = 'linear-gradient(135deg, #667eea, #764ba2)';
+                }
+
+                updatePageTitle(post.title);
+                if (pushState) {
+                    updateURL(postId);
+                }
+
+                window.scrollTo(0, 0);
+            } catch (error) {
+                console.error('Error loading post content:', error);
+                document.getElementById('postContentInner').innerHTML = '<p>Error loading post content.</p>';
+            } finally {
+                hideLoading();
+            }
+        }
+
+        // Show home page
+        function showHome(pushState = true) {
+            // Simple view switching - don't modify banner
+            document.getElementById('homeContent').style.display = 'block';
+            document.getElementById('postContent').style.display = 'none';
+            document.getElementById('homeBtn').classList.remove('show');
+
+            // Update page title and URL
+            updatePageTitle();
+            if (pushState) {
+                updateURL();
+            }
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Handle browser back/forward buttons
+        function handlePopState(event) {
+            const state = event.state || getCurrentState();
+            
+            if (state.postId) {
+                showPost(state.postId, false); // Don't push state since we're handling popstate
+            } else {
+                showHome(false); // Don't push state since we're handling popstate
+            }
+        }
+
+        // Initialize page based on URL
+        function initializeFromURL() {
+            const state = getCurrentState();
+            if (state.postId) {
+                showPost(state.postId, false); // Don't push initial state
+            } else {
+                showHome(false); // Don't push initial state
+            }
+        }
+
+        // Home button click handler
+        document.getElementById('homeBtn').addEventListener('click', (e) => {
+            e.preventDefault();
+            showHome();
+        });
+
+        // Listen for browser back/forward button clicks
+        window.addEventListener('popstate', handlePopState);
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadBlogIndex();
+            loadPosts();
+            
+            // Initialize view based on URL after posts are loaded
+            initializeFromURL();
+        });
+
+        // Auto-refresh posts every 5 minutes to check for updates
+        setInterval(async () => {
+            console.log('Checking for post updates...');
+            const oldIndex = JSON.stringify(blogIndex);
+            await loadBlogIndex();
+            const newIndex = JSON.stringify(blogIndex);
+            
+            if (oldIndex !== newIndex) {
+                console.log('Posts updated, refreshing display');
+                loadPosts();
+            }
+        }, 5 * 60 * 1000); // 5 minutes
+    </script>
+</body>
+</html>

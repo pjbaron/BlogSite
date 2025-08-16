@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHOMP Editor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.0/tinymce.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .editor-container {
+            padding: 20px;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .btn.secondary {
+            background: #95a5a6;
+        }
+        .btn.secondary:hover {
+            background: #7f8c8d;
+        }
+        .btn.success {
+            background: #27ae60;
+        }
+        .btn.success:hover {
+            background: #229954;
+        }
+        .file-input {
+            display: none;
+        }
+        .status {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: none;
+        }
+        .status.success {
+            background: #d5f4e6;
+            color: #27ae60;
+            border: 1px solid #27ae60;
+        }
+        .status.info {
+            background: #e3f2fd;
+            color: #2196f3;
+            border: 1px solid #2196f3;
+        }
+        .template-selector {
+            margin-bottom: 10px;
+        }
+        .template-selector select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CHOMP Editor</h1>
+            <p>Rexy CHOMP content, make look good!</p>
+        </div>
+        
+        <div class="editor-container">
+            <div class="controls">
+                <div class="template-selector">
+                    <label for="template-select">Quick Start: </label>
+                    <select id="template-select">
+                        <option value="">Choose a template...</option>
+                        <option value="blank">Blank Document</option>
+                        <option value="webpage">Blog Post</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="controls">
+                <button class="btn success" onclick="downloadHTML()">💾 Download HTML</button>
+                <button class="btn success" onclick="copyToClipboard()">📋 Copy HTML</button>
+                <button class="btn" onclick="document.getElementById('file-input').click()">📁 Load HTML File</button>
+                <input type="file" id="file-input" class="file-input" accept=".html,.htm,.txt" onchange="loadFile(event)">
+            </div>
+            
+            <div id="status" class="status"></div>
+            
+            <textarea id="editor">
+                <h2>Welcome to CHOMP!</h2>
+                <p>This is a fully functional WYSIWYG editor that runs entirely in your browser. You can:</p>
+                <ul>
+                    <li>Format text with <strong>bold</strong>, <em>italic</em>, and other styles</li>
+                    <li>Insert images, links, and tables</li>
+                    <li>Create lists and add headers</li>
+                    <li>Download your work as HTML</li>
+                </ul>
+                <p>Start typing to replace this content!</p>
+            </textarea>
+        </div>
+    </div>
+
+    <script>
+        // Initialize TinyMCE
+        tinymce.init({
+            selector: '#editor',
+            height: 500,
+            plugins: [
+                'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
+                'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
+                'insertdatetime', 'media', 'table', 'help', 'wordcount', 'save'
+            ],
+            toolbar: 'undo redo | blocks | bold italic underline strikethrough | ' +
+                    'alignleft aligncenter alignright alignjustify | ' +
+                    'bullist numlist outdent indent | removeformat | ' +
+                    'link image table | code preview fullscreen | help',
+            content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.6; }',
+            branding: false,
+            promotion: false,
+            menubar: 'edit view insert format tools table help',
+            contextmenu: 'link image table',
+            image_advtab: true,
+            images_upload_base_path: 'https://www.crankysauruschronicles.com/images/',
+            setup: function(editor) {
+                editor.on('change', function() {
+                    hideStatus();
+                });
+            }
+        });
+
+        // Template content
+        const templates = {
+            blank: '<p>Start writing here...</p>',
+            webpage: `
+                <header>
+                    <h1>My Blog</h1>
+                    <nav>
+                        <a href="#home">Home</a> | 
+                        <a href="#about">About</a> | 
+                        <a href="#contact">Contact</a>
+                    </nav>
+                </header>
+                <main>
+                    <article>
+                        <h2>Blog Post Title</h2>
+                        <p><em>Published on ${new Date().toLocaleDateString()}</em></p>
+                        <p>Start writing your blog post content here...</p>
+                        <h3>Section Header</h3>
+                        <p>Add more content and organize with headers as needed.</p>
+                    </article>
+                </main>
+                <footer>
+                    <p>&copy; ${new Date().getFullYear()} Your Name. All rights reserved.</p>
+                </footer>
+            `
+        };
+
+        // Template selector
+        document.getElementById('template-select').addEventListener('change', function() {
+            const template = this.value;
+            if (template && templates[template]) {
+                tinymce.get('editor').setContent(templates[template]);
+                showStatus('Template loaded successfully!', 'success');
+            }
+        });
+
+        // Download HTML file with filename prompt
+        function downloadHTML() {
+            // Prompt for filename
+            let filename = prompt('Enter filename (without extension):', 'document');
+            
+            // If user cancels or enters empty string, use default
+            if (filename === null || filename.trim() === '') {
+                filename = 'document';
+            }
+            
+            // Clean filename - remove invalid characters and trim
+            filename = filename.trim().replace(/[<>:"/\\|?*]/g, '').replace(/\s+/g, '_');
+            
+            // Ensure it doesn't end with .html already
+            if (filename.toLowerCase().endsWith('.html')) {
+                filename = filename.slice(0, -5);
+            }
+            
+            const content = tinymce.get('editor').getContent();
+            const fullHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${filename}</title>
+    <style>
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            line-height: 1.6; 
+            max-width: 800px; 
+            margin: 0 auto; 
+            padding: 20px; 
+        }
+    </style>
+</head>
+<body>
+${content}
+</body>
+</html>`;
+            
+            const blob = new Blob([fullHTML], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename + '.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showStatus(`File "${filename}.html" downloaded!`, 'success');
+        }
+
+        // Copy HTML to clipboard
+        function copyToClipboard() {
+            const content = tinymce.get('editor').getContent();
+            navigator.clipboard.writeText(content).then(() => {
+                showStatus('HTML copied to clipboard!', 'success');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = content;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showStatus('HTML copied to clipboard!', 'success');
+            });
+        }
+
+        // Clear editor
+        function clearEditor() {
+            if (confirm('Are you sure you want to clear all content?')) {
+                const editor = tinymce.get('editor');
+                if (editor) {
+                    editor.setContent('');
+                    showStatus('Editor cleared!', 'info');
+                } else {
+                    // Fallback if TinyMCE isn't ready
+                    document.getElementById('editor').value = '';
+                    showStatus('Editor cleared!', 'info');
+                }
+            }
+        }
+
+        // Load file
+        function loadFile(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const content = e.target.result;
+                    // If it's an HTML file, extract body content
+                    if (file.name.toLowerCase().endsWith('.html') || file.name.toLowerCase().endsWith('.htm')) {
+                        const bodyMatch = content.match(/<body[^>]*>([\s\S]*)<\/body>/i);
+                        if (bodyMatch) {
+                            tinymce.get('editor').setContent(bodyMatch[1]);
+                        } else {
+                            tinymce.get('editor').setContent(content);
+                        }
+                    } else {
+                        // Plain text file
+                        tinymce.get('editor').setContent('<p>' + content.replace(/\n/g, '</p><p>') + '</p>');
+                    }
+                    showStatus(`File "${file.name}" loaded successfully!`, 'success');
+                };
+                reader.readAsText(file);
+            }
+            // Reset file input
+            event.target.value = '';
+        }
+
+        // Status message functions
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = `status ${type}`;
+            status.style.display = 'block';
+            
+            setTimeout(hideStatus, 3000);
+        }
+
+        function hideStatus() {
+            const status = document.getElementById('status');
+            status.style.display = 'none';
+        }
+
+        // Auto-save to localStorage every 30 seconds
+        setInterval(function() {
+            if (tinymce.get('editor')) {
+                const content = tinymce.get('editor').getContent();
+                if (content.trim()) {
+                    localStorage.setItem('tinymce_autosave', content);
+                }
+            }
+        }, 30000);
+
+        // Load autosaved content on page load
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const saved = localStorage.getItem('tinymce_autosave');
+                if (saved && saved.trim() && saved !== '<h2>Welcome to CHOMP!</h2>') {
+                    if (confirm('Found autosaved content. Would you like to restore it?')) {
+                        tinymce.get('editor').setContent(saved);
+                        showStatus('Autosaved content restored!', 'info');
+                    }
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

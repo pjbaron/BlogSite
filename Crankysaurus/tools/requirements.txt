@@ -1,0 +1,11 @@
+# Blog Admin Application Requirements
+
+# Core dependencies
+python-dotenv>=1.0.0
+cryptography>=41.0.0
+
+# Note: tkinter is included with Python standard library
+# Note: ftplib, json, os, glob, threading, datetime, sys, subprocess are all part of Python standard library
+
+# Optional: If you want to create a standalone executable
+# pyinstaller>=5.0
