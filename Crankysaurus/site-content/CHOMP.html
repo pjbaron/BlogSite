@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CHOMP Editor</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.0/tinymce.min.js"></script>
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
             padding: 20px;
             background-color: #f5f5f5;
@@ -130,6 +131,7 @@
                     <li>Insert images, links, and tables</li>
                     <li>Create lists and add headers</li>
                     <li>Download your work as HTML</li>
+                    <li>Now includes Inter font in the font selector!</li>
                 </ul>
                 <p>Start typing to replace this content!</p>
             </textarea>
@@ -146,11 +148,21 @@
                 'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
                 'insertdatetime', 'media', 'table', 'help', 'wordcount', 'save'
             ],
-            toolbar: 'undo redo | blocks | bold italic underline strikethrough | ' +
+            toolbar: 'undo redo | blocks | fontfamily | bold italic underline strikethrough | ' +
                     'alignleft aligncenter alignright alignjustify | ' +
                     'bullist numlist outdent indent | removeformat | ' +
                     'link image table | code preview fullscreen | help',
-            content_style: 'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.6; }',
+            font_family_formats: 
+                'Inter=Inter,arial,sans-serif;' +
+                'Arial=arial,helvetica,sans-serif;' +
+                'Times New Roman=times new roman,times,serif;' +
+                'Georgia=georgia,serif;' +
+                'Verdana=verdana,geneva,sans-serif;' +
+                'System Font=-apple-system,BlinkMacSystemFont,segoe ui,roboto,helvetica,arial,sans-serif;',
+            content_css: [
+                'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap'
+            ],
+            content_style: 'body { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 16px; line-height: 1.6; }',
             branding: false,
             promotion: false,
             menubar: 'edit view insert format tools table help',
@@ -225,9 +237,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${filename}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body { 
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
             line-height: 1.6; 
             max-width: 800px; 
             margin: 0 auto; 

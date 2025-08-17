@@ -3,11 +3,16 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Blog Title</title>
+        <title>The Crankysaurus Chronicles</title>
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="preload" href="./fonts/Erasaur-wjZ9.woff" as="font" type="font/woff" crossorigin>
         <link rel="stylesheet" href="styles.css">
+
+        <meta name="description" content="Prehistoric productivity advice and ROAR goals from Mrs Cranky and Chief Dinosaur Supervisor Rexie Roller">
+        <meta property="og:title" content="The Crankysaurus Chronicles">
+        <meta property="og:description" content="Prehistoric Productivity for Procrastinators">
     </head>
 <body>
     <!-- Navigation Home Button -->
@@ -17,7 +22,7 @@
     <header class="banner" id="banner">
         <div class="banner-content">
             <h1>The Crankysaurus Chronicles</h1>
-            <p>Rexy CHOMP! Good Rexy!</p>
+            <p style="font-family: 'Erasaur', serif;">Prehistoric Productivity for Procrastinators</p>
         </div>
     </header>
 
@@ -25,21 +30,70 @@
     <div class="home-content" id="homeContent">
         <main class="main-content">
             <div class="container">
-                <!-- Sticky Posts Section -->
-                <section class="section">
-                    <h2>Featured Posts</h2>
-                    <div class="posts-grid" id="stickyPosts">
-                        <!-- Sticky posts will be loaded here -->
-                    </div>
-                </section>
+                <div class="content-with-sidebar">
+                    <!-- Main Content Area -->
+                    <div class="main-posts-area">
+                        <!-- Sticky Posts Section -->
+                        <section class="section">
+                            <h2>Featured Posts</h2>
+                            <div class="posts-grid" id="stickyPosts">
+                                <!-- Sticky posts will be loaded here -->
+                            </div>
+                        </section>
 
-                <!-- Latest Posts Section -->
-                <section class="section">
-                    <h2>Latest Posts</h2>
-                    <div class="posts-grid vertical" id="latestPosts">
-                        <!-- Latest posts will be loaded here -->
+                        <!-- Latest Posts Section -->
+                        <section class="section">
+                            <h2>Latest Posts</h2>
+                            <div class="posts-grid vertical" id="latestPosts">
+                                <!-- Latest posts will be loaded here -->
+                            </div>
+                        </section>
                     </div>
-                </section>
+
+                    <!-- Sidebar for Home Page -->
+                    <aside class="sidebar home-sidebar">
+                        <!-- About This Blog Box -->
+                        <div class="about-blog">
+                            <h3>ABOUT THIS BLOG</h3>
+                            <p>I'm Mrs Cranky, a dinosaur-loving 50-something on a mission to prove that goal-setting can be fun, sustainable, and successful with proper prehistoric supervision. Here you'll find ROAR goals, sticker wisdom, and advice from Chief Dinosaur Supervisor Rexie Roller.</p>
+                        </div>
+
+                        <!-- Search Box -->
+                        <div class="sidebar-search">
+                            <input type="text" class="search-input" placeholder="Search TCC...">
+                        </div>
+
+                        <!-- Rexie's Content Box -->
+                        <div class="rexie-content">
+                            <h3>REXIE'S CORNER</h3>
+                            <h4>Ask Rexie!</h4>
+                            <p>Got a productivity problem that needs prehistoric wisdom? Rexie is here to chomp through your excuses!</p>
+                            <p><a href="#ask-rexie">Submit your question →</a></p>
+                            
+                            <h4>Latest from Chief Dinosaur Supervisor Rexie Roller</h4>
+                            <ul>
+                                <li><a href="#interview">Complete Rexie Interview</a></li>
+                                <li><a href="#roar-goals">What are ROAR Goals?</a></li>
+                                <li><a href="#stickers">The Science of Stickers</a></li>
+                            </ul>
+                        </div>
+
+                        <!-- Social Media Placeholder -->
+                        <div class="social-placeholder">
+                            <h3>Rexie on Social Media</h3>
+                            <p>Coming soon! Follow Rexie's prehistoric wisdom on X for motivation and chomping advice.</p>
+                        </div>
+
+                        <!-- Quote Box -->
+                        <div class="quote-box">
+                            <h3>ROAR WISDOM OF THE WEEK</h3>
+                            <div class="quote-text">
+                                "You have to kiss a lot of frogs before finding your productivity prince. Or in my case, a T-Rex with strong opinions about lawyer consumption."
+                            </div>
+                            <div class="quote-author">~ Mrs Cranky</div>
+                        </div>
+                    </aside>
+                </div>
             </div>
         </main>
     </div>
@@ -48,8 +102,57 @@
     <div class="post-content" id="postContent">
         <div class="post-hero-image" id="postHeroImage"></div>
         <div class="container">
-            <div class="post-content-inner" id="postContentInner">
-                <!-- Post content will be loaded here -->
+            <div class="content-with-sidebar">
+                <!-- Main Post Content -->
+                <div class="main-posts-area">
+                    <div class="post-content-inner" id="postContentInner">
+                        <!-- Post content will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Sidebar for Post Page -->
+                <aside class="sidebar post-sidebar">
+                    <!-- About This Blog Box (no top margin for post view) -->
+                    <div class="about-blog">
+                        <h3>ABOUT THIS BLOG</h3>
+                        <p>I'm Mrs Cranky, a dinosaur-loving 50-something on a mission to prove that goal-setting can be fun, sustainable, and successful with proper prehistoric supervision. Here you'll find ROAR goals, sticker wisdom, and advice from Chief Dinosaur Supervisor Rexie Roller.</p>
+                    </div>
+
+                    <!-- Search Box -->
+                    <div class="sidebar-search">
+                        <input type="text" class="search-input" placeholder="Search TCC...">
+                    </div>
+
+                    <!-- Rexie's Content Box -->
+                    <div class="rexie-content">
+                        <h3>REXIE'S CORNER</h3>
+                        <h4>Ask Rexie!</h4>
+                        <p>Got a productivity problem that needs prehistoric wisdom? Rexie is here to chomp through your excuses!</p>
+                        <p><a href="#ask-rexie">Submit your question →</a></p>
+                        
+                        <h4>Latest from Chief Dinosaur Supervisor Rexie Roller</h4>
+                        <ul>
+                            <li><a href="#interview">Complete Rexie Interview</a></li>
+                            <li><a href="#roar-goals">What are ROAR Goals?</a></li>
+                            <li><a href="#stickers">The Science of Stickers</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Social Media Placeholder -->
+                    <div class="social-placeholder">
+                        <h3>Rexie on Social Media</h3>
+                        <p>Coming soon! Follow Rexie's prehistoric wisdom on X for motivation and chomping advice.</p>
+                    </div>
+
+                    <!-- Quote Box -->
+                    <div class="quote-box">
+                        <h3>ROAR WISDOM OF THE WEEK</h3>
+                        <div class="quote-text">
+                            "You have to kiss a lot of frogs before finding your productivity prince. Or in my case, a T-Rex with strong opinions about lawyer consumption."
+                        </div>
+                        <div class="quote-author">~ Mrs Cranky</div>
+                    </div>
+                </aside>
             </div>
         </div>
     </div>
@@ -73,6 +176,56 @@
             document.getElementById('loadingIndicator').style.display = 'none';
         }
 
+        // Function to get sample blog index data
+        function getSampleIndex() {
+            return {
+                stickyPosts: [
+                    {
+                        id: "faq",
+                        title: "FAQ - Everything You Never Wanted to Know",
+                        excerpt: "Who am I? Why dinosaurs? Are you actually a grown-up? All your burning questions answered!",
+                        thumbnail: null,
+                        contentFile: "posts/faq.html",
+                        date: "2025-08-01"
+                    },
+                    {
+                        id: "roar-goals",
+                        title: "I Am Cranky, Hear Me ROAR!",
+                        excerpt: "Introducing ROAR goals - the prehistoric productivity system that actually works with human psychology.",
+                        thumbnail: null,
+                        contentFile: "posts/roar-goals.html",
+                        date: "2025-08-02"
+                    }
+                ],
+                latestPosts: [
+                    {
+                        id: "ask-rexie-1",
+                        title: "Ask Rexie: Conquering Procrastination",
+                        excerpt: "Sarah from Manchester gets prehistoric wisdom about procrastination. Spoiler: Don't try to eat the whole mammoth in one bite!",
+                        thumbnail: null,
+                        contentFile: "posts/ask-rexie-1.html",
+                        date: "2025-08-16"
+                    },
+                    {
+                        id: "dopeysaurus",
+                        title: "The Dopeysaurus: Why SMART Goals Made Me Dumb",
+                        excerpt: "The origin story of how traditional productivity methods failed me and led to the birth of TCC.",
+                        thumbnail: null,
+                        contentFile: "posts/dopeysaurus.html",
+                        date: "2025-08-15"
+                    },
+                    {
+                        id: "curiousaurus",
+                        title: "The Curiousaurus: Can Stickers Make Me Exercise?",
+                        excerpt: "A grumpy non-morning person attempts the ultimate challenge: consistent morning exercise with prehistoric supervision.",
+                        thumbnail: null,
+                        contentFile: "posts/curiousaurus.html",
+                        date: "2025-08-14"
+                    }
+                ]
+            };
+        }
+
         // Function to load blog index
         async function loadBlogIndex() {
             try {
@@ -92,8 +245,10 @@
                 return blogIndex;
             } catch (error) {
                 console.error('Error loading blog index:', error);
+                console.log('Using sample data as fallback');
+                blogIndex = getSampleIndex();
                 hideLoading();
-                return "";
+                return blogIndex;
             }
         }
 
@@ -170,6 +325,97 @@
             });
         }
 
+        // Search functionality
+        function performSearch(query) {
+            if (!blogIndex || !query.trim()) {
+                showAllPosts();
+                return;
+            }
+
+            const searchTerm = query.toLowerCase().trim();
+            const allPosts = [...blogIndex.stickyPosts, ...blogIndex.latestPosts];
+            
+            const filteredPosts = allPosts.filter(post => {
+                return post.title.toLowerCase().includes(searchTerm) ||
+                       post.excerpt.toLowerCase().includes(searchTerm) ||
+                       (post.tags && post.tags.some(tag => tag.toLowerCase().includes(searchTerm)));
+            });
+
+            displaySearchResults(filteredPosts, searchTerm);
+        }
+
+        function displaySearchResults(results, searchTerm) {
+            const stickyContainer = document.getElementById('stickyPosts');
+            const latestContainer = document.getElementById('latestPosts');
+            const stickySection = stickyContainer.closest('.section');
+            const latestSection = latestContainer.closest('.section');
+
+            if (results.length === 0) {
+                stickySection.style.display = 'none';
+                latestSection.querySelector('h2').textContent = `No results found for "${searchTerm}"`;
+                latestContainer.innerHTML = `
+                    <div style="text-align: center; padding: 2rem; color: #666;">
+                        <p>No posts match your search. Try different keywords!</p>
+                        <p><strong>REXIE SAY:</strong> "NO FIND SEARCH THING! TRY DIFFERENT WORD! MAYBE SEARCH 'CHOMP' OR 'STICKER'!"</p>
+                    </div>
+                `;
+            } else {
+                stickySection.style.display = 'none';
+                latestSection.querySelector('h2').textContent = `Search Results for "${searchTerm}" (${results.length})`;
+                latestContainer.innerHTML = results.map(post => createPostCard(post, true)).join('');
+                
+                // Add click listeners to search result cards
+                latestContainer.querySelectorAll('.post-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const postId = card.dataset.postId;
+                        showPost(postId);
+                    });
+                });
+            }
+        }
+
+        function showAllPosts() {
+            const stickySection = document.getElementById('stickyPosts').closest('.section');
+            const latestSection = document.getElementById('latestPosts').closest('.section');
+            
+            stickySection.style.display = 'block';
+            latestSection.querySelector('h2').textContent = 'Latest Posts';
+            loadPosts(); // Reload original posts
+        }
+
+        function setupSearchHandlers() {
+            const searchInputs = document.querySelectorAll('.search-input');
+            
+            searchInputs.forEach(input => {
+                // Search as user types (with debounce)
+                let searchTimeout;
+                input.addEventListener('input', (e) => {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        performSearch(e.target.value);
+                        // Sync all search inputs
+                        searchInputs.forEach(otherInput => {
+                            if (otherInput !== e.target) {
+                                otherInput.value = e.target.value;
+                            }
+                        });
+                    }, 300); // Wait 300ms after user stops typing
+                });
+
+                // Clear search on Escape key
+                input.addEventListener('keydown', (e) => {
+                    if (e.key === 'Escape') {
+                        input.value = '';
+                        showAllPosts();
+                        // Clear all search inputs
+                        searchInputs.forEach(otherInput => {
+                            otherInput.value = '';
+                        });
+                    }
+                });
+            });
+        }
+
         // Find post by ID
         function findPost(postId) {
             if (!blogIndex) return null;
@@ -178,7 +424,7 @@
 
         // Update page title based on current view
         function updatePageTitle(postTitle = null) {
-            const baseTitle = "Your Blog Title";
+            const baseTitle = "The Crankysaurus Chronicles";
             if (postTitle) {
                 document.title = `${postTitle} - ${baseTitle}`;
             } else {
@@ -207,7 +453,6 @@
             history.pushState(state, '', url);
         }
 
-
         // Show individual post with iframe
         async function showPost(postId, pushState = true) {
             const post = findPost(postId);
@@ -228,7 +473,7 @@
                     iframe.src = contentUrl;
                     iframe.title = post.title;
                     iframe.style.cssText = `
-                        width: 80%; 
+                        width: 100%; 
                         margin: 0 auto; 
                         display: block; 
                         border: none; 
@@ -264,11 +509,7 @@
                 }
 
                 const heroImage = document.getElementById('postHeroImage');
-                if (post.thumbnail) {
-                    heroImage.style.backgroundImage = `url('${post.thumbnail}')`;
-                } else {
-                    heroImage.style.backgroundImage = 'linear-gradient(135deg, #667eea, #764ba2)';
-                }
+				heroImage.style.display = 'none'; // This hides the hero image completely
 
                 updatePageTitle(post.title);
                 if (pushState) {
@@ -335,9 +576,24 @@
         document.addEventListener('DOMContentLoaded', async () => {
             await loadBlogIndex();
             loadPosts();
+            setupSearchHandlers(); // Add search functionality
             
             // Initialize view based on URL after posts are loaded
             initializeFromURL();
+
+            // Activate social media demo (remove this when adding real links)
+            /*
+            setTimeout(() => {
+                const socialBoxes = document.querySelectorAll('.social-placeholder');
+                socialBoxes.forEach(socialBox => {
+                    socialBox.classList.add('active');
+                    socialBox.innerHTML = `
+                        <h3>Follow Rexie!</h3>
+                        <p>Get daily prehistoric productivity wisdom: <a href="https://x.com/rexie_roller" style="color: white; font-weight: bold;">@rexie_roller</a></p>
+                    `;
+                });
+            }, 3000);
+            */
         });
 
         // Auto-refresh posts every 5 minutes to check for updates
